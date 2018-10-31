@@ -16,7 +16,7 @@ import mdj2.bigspace.engine.input.IKeyboard;
 import mdj2.bigspace.engine.input.IMouse;
 import mdj2.bigspace.engine.services.ServiceProvider;
 
-public class MenuScene extends GameScene{
+public class MenuScene extends GameScene {
 
 	
 	Picazzo game;

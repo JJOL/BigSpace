@@ -5,12 +5,14 @@ import mdj2.bigspace.engine.input.IKeyboard;
 import mdj2.bigspace.engine.input.IMouse;
 import mdj2.bigspace.engine.input.NullKeyboard;
 import mdj2.bigspace.engine.input.NullMouse;
+import mdj2.bigspace.engine.storage.IStorage;
 
 public class ServiceProvider {
 
 	private static IConsoleCommander ccommander;
 	private static IKeyboard keyboard;
 	private static IMouse    mouse;
+	private static IStorage storage;
 	
 	public static void setConsoleCommander(IConsoleCommander _ccommander) {
 		ccommander = _ccommander;
@@ -38,6 +40,14 @@ public class ServiceProvider {
 		if (mouse == null)
 			return new NullMouse();
 		return mouse;
+	}
+	
+	public static void setStorage(IStorage _storage) {
+		storage = _storage;
+	}
+	
+	public static IStorage getStorage() {
+		return storage;
 	}
 	
 	

@@ -97,7 +97,14 @@ public class SwingMouse implements IMouse, MouseListener, MouseMotionListener, I
 	}
 	
 	@Override
-	public void mouseDragged(MouseEvent e) {}
+	public void mouseDragged(MouseEvent e) {
+		if (active) {
+			mouseX = e.getX();
+			mouseY = e.getY();
+			
+			// Call Listeners
+		}
+	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
