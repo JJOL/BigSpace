@@ -42,7 +42,6 @@ public class ClickableAABB {
 		
 		if (mouse.wasLeftPressed() && 
 				(mx >= x1 && mx <= x2 && my >= y1 && my <= y2)) {
-			System.out.println("Left Pressed!" + (c++));
 			isPressed = true;
 		}
 	}

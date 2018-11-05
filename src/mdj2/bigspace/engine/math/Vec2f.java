@@ -31,45 +31,37 @@ public class Vec2f {
 		return (x*x + y*y);
 	}
 	
-	public void getNormalized() {
+	public Vec2f getNormalized() {
 		float mag = magnitude();
-		x /= mag;
-		y /= mag;
+		return new Vec2f(x / mag, y / mag);
 	}
 	
-	public void getAdd(Vec2f other) {
-		x += other.x;
-		y += other.y;
+	public Vec2f getAdd(Vec2f other) {
+		return new Vec2f(x + other.x, y + other.y);
 	}
 	
-	public void getAdd(float xx, float yy) {
-		x += xx;
-		y += yy;
+	public Vec2f getAdd(float xx, float yy) {
+		return new Vec2f(x + xx, y + yy);
 	}
 	
-	public void getAdd(float f) {
-		x += f;
-		y += f;
+	public Vec2f getAdd(float f) {
+		return new Vec2f(x + f, y + f);
 	}
 	
-	public void getSubtract(Vec2f other) {
-		x -= other.x;
-		y -= other.y;
+	public Vec2f getSubtract(Vec2f other) {
+		return new Vec2f(x - other.x, y - other.y);
 	}
 	
-	public void getSubtract(float xx, float yy) {
-		x -= xx;
-		y -= yy;
+	public Vec2f getSubtract(float xx, float yy) {
+		return new Vec2f(x - xx, y - yy);
 	}
 	
-	public void getSubtract(float f) {
-		x -= f;
-		y -= f;
+	public Vec2f getSubtract(float f) {
+		return new Vec2f(x - f, y - f);
 	}
 	
-	public void getScaled(float scalar) {
-		x *= scalar;
-		y *= scalar;
+	public Vec2f getScaled(float scalar) {
+		return new Vec2f(x * scalar, y * scalar);
 	}
 	
 	public void normalize() {
