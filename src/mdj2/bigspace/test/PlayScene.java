@@ -12,12 +12,12 @@ public class PlayScene extends GameScene {
 	
 	int count = 0;
 	int secs = 0;
-	Picazzo game;
+	TestCore game;
 	
 	
 	boolean A;
 	
-	public PlayScene(Picazzo g) {
+	public PlayScene(TestCore g) {
 		super();
 		game = g;
 		A = false;

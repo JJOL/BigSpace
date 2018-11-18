@@ -19,14 +19,14 @@ import mdj2.bigspace.engine.services.ServiceProvider;
 public class MenuScene extends GameScene {
 
 	
-	Picazzo game;
+	TestCore game;
 	
 	int x, y;
 	
 	ClickableAABB playBtn;
 	ClickableAABB paramaterABtn;
 	
-	public MenuScene(Picazzo g) {
+	public MenuScene(TestCore g) {
 		super();
 		game = g;
 		 

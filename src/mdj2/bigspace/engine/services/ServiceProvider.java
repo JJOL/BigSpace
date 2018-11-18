@@ -6,6 +6,8 @@ import mdj2.bigspace.engine.input.IMouse;
 import mdj2.bigspace.engine.input.NullKeyboard;
 import mdj2.bigspace.engine.input.NullMouse;
 import mdj2.bigspace.engine.storage.IStorage;
+import mdj2.bigspace.engine.threading.ITaskManager;
+import mdj2.bigspace.engine.threading.NullTaskManager;
 
 public class ServiceProvider {
 
@@ -13,6 +15,7 @@ public class ServiceProvider {
 	private static IKeyboard keyboard;
 	private static IMouse    mouse;
 	private static IStorage storage;
+	private static ITaskManager taskManager;
 	
 	public static void setConsoleCommander(IConsoleCommander _ccommander) {
 		ccommander = _ccommander;
@@ -50,6 +53,16 @@ public class ServiceProvider {
 		return storage;
 	}
 	
+	public static void setTaskManager(ITaskManager _taskManager) {
+		taskManager = _taskManager;
+	}
+	
+	public static ITaskManager getTaskManager() {
+		if (taskManager == null)
+			return new NullTaskManager();
+		
+		return taskManager;
+	}
 	
 	public static void stopAllServices() {
 		((IService)ccommander).stopService();

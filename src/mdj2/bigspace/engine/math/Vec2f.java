@@ -3,7 +3,7 @@ package mdj2.bigspace.engine.math;
 public class Vec2f {
 	
 	public static Vec2f fromAngle(float ang) {
-		return new Vec2f((float)Math.cos(ang), (float)Math.sin(ang));
+		return new Vec2f((float)Math.cos(ang), (float)Math.sin(ang)*-1);
 	}
 
 	public float x, y;
@@ -122,5 +122,14 @@ public class Vec2f {
 	
 	public int iY() {
 		return (int)y;
+	}
+	
+	public String toString() {
+		return "("+x+","+y+")";
+	}
+	
+	public void print() {
+		float mag = magnitude();
+		System.out.println("|"+mag+"|"+"("+x+","+y+")");
 	}
 }

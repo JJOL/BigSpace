@@ -78,6 +78,8 @@ public class GSMenu extends GameScene{
 			planetIndex = 0;
 			currPlanet_img = fire_planet_img;
 		}
+		
+		switchToScene(1);
 	}
 	
 	private void hubSelectorClicked() {

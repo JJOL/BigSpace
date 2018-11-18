@@ -60,6 +60,8 @@ public class CanvasDisplay extends JFrame implements IDisplay, WindowListener {
 	}
 	
 	public void showWindow() {
+		canvas.setFocusable(true);
+		canvas.requestFocus();
 		setVisible(true);
 	}
 	

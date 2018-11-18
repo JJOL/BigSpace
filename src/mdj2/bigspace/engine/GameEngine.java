@@ -6,7 +6,10 @@ import java.util.List;
 import mdj2.bigspace.engine.debug.TestConsoleCommander;
 import mdj2.bigspace.engine.input.SwingKeyboard;
 import mdj2.bigspace.engine.input.SwingMouse;
+import mdj2.bigspace.engine.services.IService;
 import mdj2.bigspace.engine.services.ServiceProvider;
+import mdj2.bigspace.engine.storage.DummyStorage;
+import mdj2.bigspace.engine.threading.ExecutorTaskManager;
 import mdj2.bigspace.engine.window.CanvasDisplay;
 import mdj2.bigspace.engine.window.IDisplay;
 
@@ -43,7 +46,9 @@ public class GameEngine implements Runnable {
 		ServiceProvider.setKeyboard(keyboard);
 		ServiceProvider.setMouse(mouse);
 		
-		
+		ServiceProvider.setStorage(new DummyStorage());
+		ServiceProvider.setTaskManager(new ExecutorTaskManager());
+		((IService)ServiceProvider.getTaskManager()).startService();
 	}
 	
 	/*
