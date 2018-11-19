@@ -2,24 +2,24 @@ package mdj2.bigspace.game.scenes;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import mdj2.bigspace.engine.GameScene;
-import mdj2.bigspace.engine.graphics.GameWorld;
-import mdj2.bigspace.engine.graphics.ImageEntity;
+import mdj2.bigspace.engine.graphics.AnimationSprite;
 import mdj2.bigspace.engine.services.ServiceProvider;
 import mdj2.bigspace.game.core.BigSpaceCore;
 import mdj2.bigspace.game.levels.LevelWorld;
 import mdj2.bigspace.game.levels.planets.Planet;
 import mdj2.bigspace.game.levels.planets.PlanetInfo;
-import mdj2.bigspace.game.resources.ResLoader;
 import mdj2.bigspace.game.tasks.LevelLoaderTask;
 
 public class GSPlay extends GameScene {
 
+	enum SceneState {
+		PLAYING, TRANSITION_ENTER, TRANSITION_LEAVE, LOADING
+	}
+	private SceneState sceneState;
+	
+	
 	private BigSpaceCore ctx;
 	
 	private PlanetInfo planetInfo;
@@ -27,8 +27,15 @@ public class GSPlay extends GameScene {
 	private String lastPlanet;
 	private int    lastLevel;
 	
+	// Animation Transitions
+	AnimationSprite transitionEnterAnim;
+	AnimationSprite transitionLeaveAnim;
+	
 	public GSPlay(BigSpaceCore _ctx) {
 		ctx = _ctx;
+		
+		transitionEnterAnim = new AnimationSprite();
+		transitionLeaveAnim = new AnimationSprite();
 		
 		// Load Last Planet and Level Played
 		String savedPlanet = ServiceProvider.getStorage().getValue("last_planet");
@@ -45,36 +52,85 @@ public class GSPlay extends GameScene {
 			lastLevel = Integer.parseInt(savedLevel);
 		
 		ServiceProvider.getTaskManager().runTask(new LevelLoaderTask(lastPlanet, lastLevel, this));
+		sceneState = SceneState.LOADING;
 	}
 	
 	public void visitPlanet(String planetName) {
+		//TODO: Handle World Leave, Saves, Etc?
 		ServiceProvider.getTaskManager().runTask(new LevelLoaderTask(planetName, 1, this));
 		lastLevel = 1;
 		lastPlanet = planetName;
+		sceneState = SceneState.LOADING;		
 	}
 	
 	
 	@Override
 	public void onSceneEnter() {
 		System.out.println("Begin Play");
+		sceneState = SceneState.PLAYING;
+		levelWorld.begin();
 	}
 	
 	@Override
 	public void sRender(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 640, 480);
-		levelWorld.render(g);
+		
+		switch (sceneState) {
+		case PLAYING:
+			levelWorld.render(g);
+			// TODO: hud.render(g);
+			break;
+		case TRANSITION_ENTER:
+			transitionEnterAnim.render(g);
+			break;
+		case TRANSITION_LEAVE:
+			transitionLeaveAnim.render(g);
+			break;
+		case LOADING:
+		default:
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, 640, 480);
+		}
 	}
 
 	@Override
 	public void sUpdate() {
-		levelWorld.update();
 		
-		if (levelWorld.isLevelOver()) {
-			// Cargar Nivel
-			ServiceProvider.getTaskManager().runTask(new LevelLoaderTask(lastPlanet, lastLevel+1, this));
+		switch (sceneState) {
+		case PLAYING:
+			levelWorld.update();
+			
+			if (levelWorld.isLevelOver()) {
+				// Cargar Nivel
+				if (levelWorld.getNextLevel() == 1)
+					lastLevel = lastLevel + 1;
+				else
+					lastLevel = lastLevel - 1;
+				
+				ServiceProvider.getTaskManager().runTask(new LevelLoaderTask(lastPlanet, lastLevel, this));
+					
+				sceneState = SceneState.TRANSITION_ENTER;
+				transitionEnterAnim.reset();
+			}
+			
+			break;
+		case TRANSITION_ENTER:
+			transitionEnterAnim.update();
+			if (transitionEnterAnim.hasReachedEnd())
+				sceneState = SceneState.LOADING;
+			break;
+		case TRANSITION_LEAVE:
+			transitionLeaveAnim.update();
+			if (transitionLeaveAnim.hasReachedEnd()) {
+				sceneState = SceneState.PLAYING;
+				levelWorld.begin();
+			}
+			break;
+		case LOADING:
+			//TODO: Handle Timeouts??
+			default:
 		}
-		
 		
 	}
 
@@ -83,5 +139,9 @@ public class GSPlay extends GameScene {
 		levelWorld = level;
 		ctx.onLevelLoaded(planetInfo); // For Enabling Play Button in Menu and showing
                                         // level image in menu
+		
+		// Maquina de Estado
+		sceneState = SceneState.TRANSITION_LEAVE;
+		transitionLeaveAnim.reset();
 	}
 }

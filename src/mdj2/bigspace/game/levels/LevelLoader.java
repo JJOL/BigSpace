@@ -19,7 +19,7 @@ public class LevelLoader {
 	}
 
 	public LevelWorld loadWorld(int levelIndex) {
-		return loadWorld("prueba" + "_" + levelIndex);
+		return loadWorld(planetName + "_" + levelIndex);
 	}
 	
 	public LevelWorld loadWorld(String levelName) {

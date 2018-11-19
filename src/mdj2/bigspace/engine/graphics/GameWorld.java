@@ -1,6 +1,7 @@
 package mdj2.bigspace.engine.graphics;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,5 +138,37 @@ public class GameWorld {
 			physics.updateMovement(obj);
 			
 		}
+	}
+	
+	// World Query Methods
+	
+	public GameObject findObjectById(int id) {
+		for (GameObject obj : objects) {
+			if (obj.getId() == id)
+				return obj;
+		}
+		
+		return null;
+	}
+	
+	public GameObject findObjectByType (Class<GameObject> objType) {
+		for (GameObject obj : objects) {
+			if (obj.getClass().isInstance(objType)) {
+				return obj;
+			}
+		}
+		
+		return null;
+	}
+	
+	public List<GameObject> findAllObjectsByType(Class<GameObject> objType) {
+		List<GameObject> resObjs = new ArrayList<>();
+		for (GameObject obj : objects) {
+			if (obj.getClass().isInstance(objType)) {
+				resObjs.add(obj);
+			}
+		}
+		
+		return resObjs;
 	}
 }

@@ -12,10 +12,12 @@ public class LevelWorld {
 
 	private GameWorld  world;
 	int xOff;
+	private boolean started;
 	//private GameCamera camera;
 	
 	public LevelWorld(int width, int height, int levelData[]) {
 		world = new GameWorld(width, height, levelData, new TileMap());
+		started = false;
 		//camera = new GameCamera();
 		//world = new GameWorld(levelData, new TileMap());
 	}
@@ -42,6 +44,12 @@ public class LevelWorld {
 	}
 	
 	public void begin() {
+		if (started)
+			return;
+		
+		started = true;
+		
+		// Do Level Begin stuff like spawn enemys, execute timers, etc
 		xOff = 0;
 	}
 	
@@ -56,6 +64,10 @@ public class LevelWorld {
 	
 	public boolean isLevelOver() {
 		return false;
+	}
+	
+	public int getNextLevel() {
+		return 0;
 	}
 }
  

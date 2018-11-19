@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import mdj2.bigspace.game.resources.ResLoader;
+
 public class ImageEntity {
 
 	private int x, y;
@@ -20,12 +22,7 @@ public class ImageEntity {
 	}
 	
 	public void load(String path)  {
-		try {
-			img = ImageIO.read(getClass().getResource("/images/"+path));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		img = ResLoader.go(path).loadBufferedImage();
 	}
 	
 	public void render(Graphics2D g) {

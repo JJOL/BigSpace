@@ -9,6 +9,10 @@ import javax.imageio.ImageIO;
 public class ResLoader {
 
 	public static ResLoader go(String root) {
+		if (root.length() > 0 && root.charAt(0) == '/') {
+			return new ResLoader(root);
+		}
+		
 		return new ResLoader("/"+root);
 	}
 	
@@ -36,5 +40,9 @@ public class ResLoader {
 		}
 		
 		return img;
+	}
+
+	public String getPath() {
+		return path;
 	}
 }

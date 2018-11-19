@@ -6,17 +6,17 @@ import java.awt.Graphics2D;
 import mdj2.bigspace.engine.GameScene;
 import mdj2.bigspace.engine.graphics.ImageEntity;
 import mdj2.bigspace.engine.gui.ClickableAABB;
+import mdj2.bigspace.game.levels.planets.Planet;
+import mdj2.bigspace.game.levels.planets.PlanetInfo;
+import mdj2.bigspace.game.resources.ResLoader;
 
 public class GSMenu extends GameScene{
 
-	ImageEntity fire_planet_img;
-	ImageEntity water_planet_img;
-	ImageEntity earth_planet_img;
-	ImageEntity air_planet_img;
+	private ImageEntity space_img;
+	private ImageEntity currPlanet_img;
+	private ImageEntity ship_img;
 	
-	ImageEntity currPlanet_img;
-	ImageEntity ship_img;
-	
+	private boolean flying;
 	private int planetIndex;
 	
 	// Input
@@ -26,30 +26,30 @@ public class GSMenu extends GameScene{
 	
 	
 	public GSMenu() {
-		fire_planet_img = new ImageEntity(130, 0, 450, 260);
-		water_planet_img = new ImageEntity(130, 0, 450, 260);
-		earth_planet_img = new ImageEntity(130, 0, 450, 260);
-		air_planet_img = new ImageEntity(140, 0, 450, 260);
+		space_img = new ImageEntity(130, 0, 450, 260);
 		
-		fire_planet_img.load("fire_planet_scene.jpg");
-		water_planet_img.load("water_planet_scene.jpg");
+		space_img.load(ResLoader.go("images").at("ship_window").at("space_ship.jpg").getPath());
 		
 		ship_img       = new ImageEntity(0, 0, 640, 480);
-		ship_img.load("menu_grid_.png");
+		ship_img.load("images/menu_grid_.png");
 		
 		playBtn = new ClickableAABB(128, 40, 456, 160, "");
 		hubSelBtn = new ClickableAABB(44, 166, 226, 267, "");
 		configBtn = new ClickableAABB(382, 176, 600, 289, "");
 		
 		planetIndex = 0;
-		currPlanet_img = fire_planet_img;
+		currPlanet_img = new ImageEntity(130, 0, 450, 260);;
+		flying = true;
 	}
 	
 	@Override
 	public void sRender(Graphics2D g) {
 		g.setColor(Color.BLUE);
 		g.fillRect(0, 0, 640, 480);
-		currPlanet_img.render(g);
+		if (flying)
+			space_img.render(g);
+		else
+			currPlanet_img.render(g);
 		ship_img.render(g);
 	}
 
@@ -71,14 +71,6 @@ public class GSMenu extends GameScene{
 	}
 	
 	private void playClicked() {
-		if (planetIndex == 0) {
-			planetIndex = 1;
-			currPlanet_img = water_planet_img;
-		} else {
-			planetIndex = 0;
-			currPlanet_img = fire_planet_img;
-		}
-		
 		switchToScene(1);
 	}
 	
@@ -86,15 +78,27 @@ public class GSMenu extends GameScene{
 		System.out.println("Hub Selector Button Clicked!");
 		if (planetIndex == 0) {
 			planetIndex = 1;
-			currPlanet_img = water_planet_img;
+			showPlanetArrived(Planet.loadPlanet("water"));
 		} else {
 			planetIndex = 0;
-			currPlanet_img = fire_planet_img;
+			showPlanetArrived(Planet.loadPlanet("fire"));
 		}
+		//switchToScene(3);
 	}
 	
 	private void configClicked() {
 		System.out.println("Config Button Clicked!");
+	}
+	
+	// External Rsponse Methods
+	
+	public void flySpace() {
+		flying = true;
+	}
+	
+	public void showPlanetArrived(PlanetInfo planet) {
+		currPlanet_img.load(planet.getShipImage());
+		flying = false;
 	}
 
 }

@@ -5,6 +5,6 @@ import mdj2.bigspace.game.levels.LevelLoader;
 public class AirPlanet extends PlanetInfo {
 
 	public AirPlanet() {
-		super("AirPlanet", "AirShip.jpg", "Tornado.jpg", new LevelLoader("AirPlanet"));
+		super("AirPlanet", "air_ship.jpg", "Tornado.jpg", new LevelLoader("air"));
 	}
 }

@@ -30,7 +30,10 @@ public class BigSpaceCore extends GameCore {
 	}
 
 	public void onLevelLoaded(PlanetInfo planetInfo) {
-		// TODO Auto-generated method stub
+		// Update Game Menu
+		((GSMenu)ctx.getScenesList().get(0)).showPlanetArrived(planetInfo);
 		
+		// Update Hub Selector
+		//((GSHubSelector)ctx.getScenesList().get(2)).setCurrentPlanet(planetInfo);
 	}
 }
