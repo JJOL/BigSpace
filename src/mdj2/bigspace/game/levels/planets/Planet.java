@@ -8,6 +8,8 @@ public class Planet {
 	private static final PlanetInfo WATER_PLANET = new WaterPlanet();
 	private static final PlanetInfo EARTH_PLANET = new EarthPlanet();
 	private static final PlanetInfo AIR_PLANET   = new AirPlanet();
+	
+	private static final PlanetInfo DEMO_WORLD   = new DemoPlanet();
 
 	public static PlanetInfo loadPlanet(String planetName) {
 		PlanetInfo planet = null;
@@ -20,7 +22,7 @@ public class Planet {
 		} else if (planetName.equalsIgnoreCase("air")){
 			planet = AIR_PLANET;
 		} else {
-			planet = new FirePlanet();
+			planet = DEMO_WORLD;
 		}
 		
 		return planet;

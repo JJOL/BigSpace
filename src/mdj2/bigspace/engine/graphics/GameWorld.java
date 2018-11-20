@@ -1,7 +1,9 @@
 package mdj2.bigspace.engine.graphics;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -79,7 +81,7 @@ public class GameWorld {
 		
 		// Reposition Graphics in Window Origin for other Scene Rendering
 		
-		g.translate(0, 0);
+		g.setTransform(new AffineTransform());
 		
 		fixedRender(g);
 	}
@@ -159,6 +161,7 @@ public class GameWorld {
 
 			physics.applyGravity(obj);
 			physics.testSolidCollisions(obj);
+			physics.testObjectCollision(obj);
 			physics.updateMovement(obj);
 			
 		}

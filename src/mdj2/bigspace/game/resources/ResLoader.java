@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class ResLoader {
 
@@ -40,6 +43,22 @@ public class ResLoader {
 		}
 		
 		return img;
+	}
+	
+	public AudioInputStream loadAudioStream() {
+		AudioInputStream sample = null;
+		System.out.println("Loading Audio from: "+ path);
+		try {
+			sample  = AudioSystem.getAudioInputStream(getClass().getResource(path));
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return sample;
 	}
 
 	public String getPath() {

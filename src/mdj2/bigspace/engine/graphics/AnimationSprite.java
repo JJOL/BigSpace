@@ -17,12 +17,25 @@ public class AnimationSprite {
 	
 	private int sX, sY;
 	
+	private int width, height;
+	
 	public AnimationSprite(int x, int y, String name) {
 		imageIndex = 0;
 		sprite = Sprites.getSprite(name);
 		System.out.println("Sprites Amount:"+ sprite.size());
 		sX = x;
 		sY = y;
+	}
+	
+	public AnimationSprite(int x, int y, String name, int width, int height) {
+		imageIndex = 0;
+		sprite = Sprites.getSprite(name);
+		System.out.println("Sprites Amount:"+ sprite.size());
+		sX = x;
+		sY = y;
+		
+		this.width  = width;
+		this.height = height;
 	}
 	
 	public void setX(int x) {
@@ -56,7 +69,10 @@ public class AnimationSprite {
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(sprite.get(imageIndex), sX, sY, null);
+		if (width != 0)
+			g.drawImage(sprite.get(imageIndex), sX, sY, width, height, null);
+		else
+			g.drawImage(sprite.get(imageIndex), sX, sY, null);
 	}
 	
 	public boolean hasReachedEnd() {

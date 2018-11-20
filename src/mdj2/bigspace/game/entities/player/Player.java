@@ -31,8 +31,8 @@ public class Player extends GameObject implements CameraObservable {
 	
 	public Player() {
 		super();
-		sprite = new AnimationSprite(0,0, "enemy_1");
-		sprite.setAnimSpd(5);
+		//sprite = new AnimationSprite(0,0, "enemy_1");
+		//sprite.setAnimSpd(5);
 		mass = 3f;
 		
 		pWidth  = 32;
@@ -46,6 +46,9 @@ public class Player extends GameObject implements CameraObservable {
 		
 		weaponery = new PlayerWeaponery(this);
 		weaponery.load();
+		
+		sprite = new AnimationSprite(pos.iX(), pos.iY(), "player", 44, 70);
+		sprite.setAnimSpd(15);
 	}
 	
 	private void processInput() {
@@ -55,6 +58,7 @@ public class Player extends GameObject implements CameraObservable {
 		if (keyboard.isKeyPressed(KeyEvent.VK_A)) {
 			vel.add(-5, 0);
 			//acc.add(-0.6f, 0);
+			
 		}
 		
 		if (keyboard.isKeyPressed(KeyEvent.VK_D)) {
@@ -63,9 +67,9 @@ public class Player extends GameObject implements CameraObservable {
 		}
 		
 		if (keyboard.wasKeyPressed(KeyEvent.VK_SPACE)) {
-			if (jumpCount <= 1) {
+			if (jumpCount <= 4) {
 				vel.add(0, -5 );
-				//jumpCount++;
+				jumpCount++;
 			}
 		}
 		
@@ -78,6 +82,8 @@ public class Player extends GameObject implements CameraObservable {
 		if (keyboard.wasKeyPressed(KeyEvent.VK_Q)) {
 			weaponery.rollBackWeapon();
 		}
+		
+		
 	}
 	
 	@Override
@@ -85,16 +91,15 @@ public class Player extends GameObject implements CameraObservable {
 		processInput();
 		if (camera != null)
 			camera.lookAt(pos);
-		
-		sprite.setX(pos.iX()-16);
-		sprite.setY(pos.iY()-32);
 		sprite.update();
 	}
 	
 	@Override
 	public void render(Graphics2D g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(pos.iX()-pWidth/2, pos.iY()-pHeight/2, pWidth, pHeight);	
+		//g.fillRect(pos.iX()-pWidth/2, pos.iY()-pHeight/2, pWidth, pHeight);
+		sprite.setX(pos.iX()-16);
+		sprite.setY(pos.iY()-39);
 		sprite.render(g);
 	}
 

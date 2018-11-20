@@ -1,11 +1,14 @@
 package mdj2.bigspace.game.scenes;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import mdj2.bigspace.engine.GameScene;
 import mdj2.bigspace.engine.graphics.AnimationSprite;
 import mdj2.bigspace.engine.services.ServiceProvider;
+import mdj2.bigspace.game.AudioPlayer;
 import mdj2.bigspace.game.core.BigSpaceCore;
 import mdj2.bigspace.game.levels.LevelWorld;
 import mdj2.bigspace.game.levels.planets.Planet;
@@ -31,6 +34,8 @@ public class GSPlay extends GameScene {
 	AnimationSprite transitionEnterAnim;
 	AnimationSprite transitionLeaveAnim;
 	
+	int passedLevels;
+	
 	public GSPlay(BigSpaceCore _ctx) {
 		ctx = _ctx;
 		
@@ -53,6 +58,8 @@ public class GSPlay extends GameScene {
 		
 		ServiceProvider.getTaskManager().runTask(new LevelLoaderTask(lastPlanet, lastLevel, this));
 		sceneState = SceneState.LOADING;
+		
+		AudioPlayer.get().playSound("ambient");
 	}
 	
 	public void visitPlanet(String planetName) {
@@ -69,6 +76,8 @@ public class GSPlay extends GameScene {
 		System.out.println("Begin Play");
 		sceneState = SceneState.PLAYING;
 		levelWorld.begin();
+		passedLevels = 0;
+		//
 	}
 	
 	@Override
@@ -79,6 +88,11 @@ public class GSPlay extends GameScene {
 		switch (sceneState) {
 		case PLAYING:
 			levelWorld.render(g);
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("Times New Roman", Font.BOLD, 24));
+			g.drawString("Time Left: " + levelWorld.getTime(), 10, 25);
+			
+			g.drawString("Levels Passed: " + passedLevels, 10, 40);
 			// TODO: hud.render(g);
 			break;
 		case TRANSITION_ENTER:
@@ -92,6 +106,9 @@ public class GSPlay extends GameScene {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 640, 480);
 		}
+		
+		//g.translate(0, 0);
+		
 	}
 
 	@Override
@@ -108,10 +125,17 @@ public class GSPlay extends GameScene {
 				else
 					lastLevel = lastLevel - 1;
 				
+				passedLevels++;
+				
 				ServiceProvider.getTaskManager().runTask(new LevelLoaderTask(lastPlanet, lastLevel, this));
 					
 				sceneState = SceneState.TRANSITION_ENTER;
 				transitionEnterAnim.reset();
+			}
+			
+			if (levelWorld.getTime() <= 0) {
+				visitPlanet(ServiceProvider.getStorage().getValue("last_planet"));
+				switchToScene(0);
 			}
 			
 			break;
@@ -121,11 +145,13 @@ public class GSPlay extends GameScene {
 				sceneState = SceneState.LOADING;
 			break;
 		case TRANSITION_LEAVE:
+			sceneState = SceneState.PLAYING;
+			levelWorld.begin();/*
 			transitionLeaveAnim.update();
 			if (transitionLeaveAnim.hasReachedEnd()) {
 				sceneState = SceneState.PLAYING;
 				levelWorld.begin();
-			}
+			}*/
 			break;
 		case LOADING:
 			//TODO: Handle Timeouts??

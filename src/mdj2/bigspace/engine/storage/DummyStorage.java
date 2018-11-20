@@ -15,7 +15,7 @@ public class DummyStorage implements IService, IStorage{
 	@Override
 	public String getValue(String key) {
 		if (key.equalsIgnoreCase("last_planet")) {
-			return "demo";
+			return "fire";
 		}
 		if (key.equalsIgnoreCase("last_level")) {
 			return "1";
