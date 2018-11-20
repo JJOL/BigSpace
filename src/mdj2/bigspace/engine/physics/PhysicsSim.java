@@ -1,6 +1,8 @@
 package mdj2.bigspace.engine.physics;
 
+import java.awt.Rectangle;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mdj2.bigspace.engine.gameobjects.Collider;
@@ -12,6 +14,7 @@ import mdj2.bigspace.game.levels.tiles.Tile;
 public class PhysicsSim {
 
 	public static final Vec2f FALL_UNIT_VEC = Vec2f.fromAngle((float)Math.toRadians(270));
+	public static final Vec2f RIGHT_UNIT_VEC = Vec2f.fromAngle(0);
 	
 	// Configured Enviornment
 	private float gravityMag;
@@ -51,21 +54,53 @@ public class PhysicsSim {
 		// For Vertical Motion
 		Vec2f oVel = obj.getVel();
 		Vec2f cPos;
-		
-		Vec2f dirVer = FALL_UNIT_VEC;
-		float delta;
-		float dest;
-		
-		delta = dirVer.dot(oVel);
-		Collider newCol = col.translate(0, delta);
-		
-		
+		{
+			Vec2f dirVer = FALL_UNIT_VEC;
+			float delta;
+			float dest;
+			
+			delta = dirVer.dot(oVel);
+			Rectangle colRect = col.getRect();
+			colRect.translate(0, (int)(delta+Math.signum(delta)));
+			List<Tile> tiles = world.getIntersectTiles(colRect);
+			boolean collision = false;
+			for (Tile tile : tiles) {
+				if (tile.isSolid()) {
+					collision = true;
+					break;
+				}
+			}
+			if (collision) {
+				obj.getVel().y = 0;
+				//obj.getVel().y = -2*Math.signum(delta);
+			}
+		}
 		// For Horizontal Motion
-		
+		{
+			Vec2f dirVer = RIGHT_UNIT_VEC;
+			float delta;
+			float dest;
+			
+			delta = dirVer.dot(oVel);
+			Rectangle colRect = col.getRect();
+			colRect.translate((int)(delta), 0);
+			List<Tile> tiles = world.getIntersectTiles(colRect);
+			boolean collision = false;
+			for (Tile tile : tiles) {
+				if (tile.isSolid()) {
+					collision = true;
+					break;
+				}
+			}
+			if (collision) {
+				obj.getVel().x = 0;
+				//obj.getVel().x = -2*Math.signum(delta);
+			}
+		}
 		// Test if collider position + velocity collides againt the next solid tile
 		
 		
-		
+		/*
 		if (delta > 0) {
 			// Going Down
 			cPos = col.getBottom();
@@ -109,7 +144,7 @@ public class PhysicsSim {
 			// Limit Velocity to not pass over the solid
 			obj.getVel().y = topBlock - cPos.y;	
 			obj.getVel().y = 0;
-		}
+		}*/
 		
 	}
 	

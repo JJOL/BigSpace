@@ -1,6 +1,7 @@
 package mdj2.bigspace.engine.graphics;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -49,7 +50,6 @@ public class GameWorld {
 	
 	public Tile getTileAt(Vec2f wPos) {
 		int tSize = getTileSize();
-		System.out.println("Max X:" + tWidth*tSize);
 		if (wPos.x < 0 || wPos.y < 0 || wPos.x > tWidth*tSize || wPos.y > tHeight*tSize)
 			return null;
 		
@@ -202,5 +202,27 @@ public class GameWorld {
 		}
 		
 		return resObjs;
+	}
+
+	public List<Tile> getIntersectTiles(Rectangle colRect) {
+		ArrayList<Tile> tiles = new ArrayList<>();
+		
+		int tSize = getTileSize();
+		int startX = (colRect.x/tSize)*tSize,
+			startY = (colRect.y/tSize)*tSize;
+		
+		int endX   = ((colRect.x + colRect.width) / tSize) * tSize,
+			endY   = ((colRect.y + colRect.height) / tSize) * tSize;
+		
+		for (int i = startX; i <= endX; i += tSize) {
+			for (int j = startY; j <= endY; j += tSize) {
+				Tile t = getTileAt(new Vec2f(i, j));
+				if (t != null) {
+					tiles.add(t);
+				}
+			}
+		}
+		
+		return tiles;
 	}
 }

@@ -79,4 +79,11 @@ public class Collider extends ObjectComponent{
 		return new Vec2f();
 	}
 	
+	public Rectangle getRect() {
+		return new Rectangle(0,0);
+	}
+	
+	public Collider translate(float x, float y) {
+		return new Collider(baseObject);
+	}
 }

@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import mdj2.bigspace.engine.gameobjects.GameObject;
 import mdj2.bigspace.engine.gameobjects.RectCollider;
+import mdj2.bigspace.engine.graphics.AnimationSprite;
 import mdj2.bigspace.engine.graphics.CameraObservable;
 import mdj2.bigspace.engine.input.IKeyboard;
 import mdj2.bigspace.engine.math.Vec2f;
@@ -18,10 +19,12 @@ public class Player extends GameObject implements CameraObservable {
 	
 	private int pWidth, pHeight;
 	
-	
+	AnimationSprite sprite;
 	
 	public Player() {
 		super();
+		sprite = new AnimationSprite(0,0, "enemy_1");
+		sprite.setAnimSpd(5);
 		mass = 3f;
 		
 		pWidth  = 32;
@@ -29,7 +32,7 @@ public class Player extends GameObject implements CameraObservable {
 		
 		camera = null;
 		
-		collider = new RectCollider(this, pWidth, pHeight);
+		collider = new RectCollider(this, pWidth-5, pHeight-5);
 	}
 	
 	private void processInput() {
@@ -56,12 +59,17 @@ public class Player extends GameObject implements CameraObservable {
 		processInput();
 		if (camera != null)
 			camera.lookAt(pos);
+		
+		sprite.setX(pos.iX()-16);
+		sprite.setY(pos.iY()-32);
+		sprite.update();
 	}
 	
 	@Override
 	public void render(Graphics2D g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(pos.iX()-pWidth/2, pos.iY()-pHeight/2, pWidth, pHeight);
+		g.fillRect(pos.iX()-pWidth/2, pos.iY()-pHeight/2, pWidth, pHeight);	
+		sprite.render(g);
 	}
 
 	@Override

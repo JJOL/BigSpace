@@ -34,8 +34,8 @@ public class GSPlay extends GameScene {
 	public GSPlay(BigSpaceCore _ctx) {
 		ctx = _ctx;
 		
-		transitionEnterAnim = new AnimationSprite();
-		transitionLeaveAnim = new AnimationSprite();
+		transitionEnterAnim = new AnimationSprite(0, 0, "transition_in");
+		transitionLeaveAnim = new AnimationSprite(0, 0, "transition_out");
 		
 		// Load Last Planet and Level Played
 		String savedPlanet = ServiceProvider.getStorage().getValue("last_planet");
