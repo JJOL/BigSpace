@@ -9,7 +9,7 @@ public interface IStorage {
 	
 	public boolean putList(String key, List<String> list);
 	public boolean pushToList(String key, String value);
-	public boolean getList(String key);
+	public List<String> getList(String key);
 	
 	public boolean save();
 	public boolean load();

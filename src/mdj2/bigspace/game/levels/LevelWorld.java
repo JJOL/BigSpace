@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import mdj2.bigspace.engine.graphics.GameWorld;
 import mdj2.bigspace.engine.math.Vec2f;
 import mdj2.bigspace.game.entities.EBoss;
-import mdj2.bigspace.game.entities.Player;
+import mdj2.bigspace.game.entities.player.Player;
 import mdj2.bigspace.game.levels.tiles.Tile;
 import mdj2.bigspace.game.levels.tiles.TileMap;
 
