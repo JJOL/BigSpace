@@ -65,7 +65,7 @@ public class Player extends GameObject implements CameraObservable {
 		if (keyboard.wasKeyPressed(KeyEvent.VK_SPACE)) {
 			if (jumpCount <= 1) {
 				vel.add(0, -5 );
-				jumpCount++;
+				//jumpCount++;
 			}
 		}
 		

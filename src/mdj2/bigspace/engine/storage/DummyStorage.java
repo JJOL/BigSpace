@@ -36,9 +36,9 @@ public class DummyStorage implements IService, IStorage{
 	}
 
 	@Override
-	public boolean getList(String key) {
+	public List<String> getList(String key) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
