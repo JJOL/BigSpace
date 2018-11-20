@@ -115,6 +115,8 @@ public abstract class GameObject {
 	
 	public void onCollision(GameObject other) {}
 	
+	public void onGroundHit() {}
+	
 	public void render(Graphics2D g) {};
 	
 	public void update() {}

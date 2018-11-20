@@ -71,7 +71,11 @@ public class PhysicsSim {
 				}
 			}
 			if (collision) {
+				if (obj.getVel().y > 0 ) {
+					obj.onGroundHit();
+				}
 				obj.getVel().y = 0;
+				
 				//obj.getVel().y = -2*Math.signum(delta);
 			}
 		}
