@@ -6,7 +6,7 @@ import mdj2.bigspace.engine.graphics.GameWorld;
 public abstract class EnemyBase extends GameObject {
 
 	public EnemyBase(GameWorld world) {
-		super(world);
+		super();
 		// TODO Auto-generated constructor stub
 	}
 

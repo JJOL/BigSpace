@@ -2,9 +2,11 @@ package mdj2.bigspace.engine.graphics;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -19,6 +21,8 @@ public class GameWorld {
 	private List<GameObject> objects = new LinkedList<>();
 	private Queue<GameObject> spawnQueue;
 	
+	private Map<GameObject, Vec2f> objSpawnPosMap;
+	
 	private PhysicsSim physics;
 	
 	private int tileStructure[];
@@ -29,14 +33,39 @@ public class GameWorld {
 		this.tileStructure = tileStructure;
 		this.tileMap = tileMap;
 		spawnQueue = new LinkedBlockingQueue<>();
+		objSpawnPosMap = new HashMap<>();
 		physics = new PhysicsSim(this);
 		
 		tWidth  = w_width;
 		tHeight = w_height; 
 	}
 	
-	public void spawn(GameObject obj) {
+	public List<GameObject> getObjects(){
+		return objects;
+	}
+	public int getTileSize() {
+		return tileMap.getTileSize();
+	}
+	
+	public Tile getTileAt(Vec2f wPos) {
+		int tSize = getTileSize();
+		System.out.println("Max X:" + tWidth*tSize);
+		if (wPos.x < 0 || wPos.y < 0 || wPos.x > tWidth*tSize || wPos.y > tHeight*tSize)
+			return null;
+		
+		int tx = wPos.iX() / tSize,
+			ty = wPos.iY() / tSize;
+		
+		return tileMap.getTileFromId(tileStructure[ty * tWidth + tx]);
+	}
+	
+	public void spawn(GameObject obj, Vec2f pos) {
 		spawnQueue.add(obj);
+		objSpawnPosMap.put(obj, pos);
+	}
+	
+	public void spawn(GameObject obj) {
+		spawn(obj, new Vec2f(0, 0));
 	}
 	
 	public void render(Graphics2D g, int x1, int y1, int x2, int y2) {
@@ -89,26 +118,20 @@ public class GameWorld {
 				}
 			}
 		}
-		/*int tX1 = nearestTileX(x1),
-			tY1 = nearsetTileY(y1),
-			tX2 = nearestTileX(x2),
-			tY2 = nearestTileY(y2);
 		
-		for (int ty = tY1; ty < tY2; ty++) {
-			for (int tx = tX1; tx < tX2; tx++) {
-				Tile tile = tileMap.getTileFromId(tileStructure[ty*tWidth + tx]);
-				tile.
-			}
-		}*/
 	}
 	
 	public void update() {
-		
+		 
 		// Spawn Requested Objects
 		while (!spawnQueue.isEmpty()) {
 			GameObject newObj = spawnQueue.poll();
-			newObj.onWorldSpawn();
+			newObj.onSpawn(this, objSpawnPosMap.get(newObj));
+			objSpawnPosMap.remove(newObj);
 			objects.add(newObj);
+			
+			// For Subclasses of gameobjects
+			newObj.onWorldSpawn();
 		}
 		
 		// Update Objects
@@ -128,6 +151,7 @@ public class GameWorld {
 			}
 		}
 		
+		physics.resetFrame();
 		// Update Object Physics
 		itr = objects.iterator();
 		while (itr.hasNext()) {
@@ -138,6 +162,14 @@ public class GameWorld {
 			physics.updateMovement(obj);
 			
 		}
+	}
+	
+	public Vec2f getMinCorner() {
+		return new Vec2f(0,0);
+	}
+	
+	public Vec2f getMaxCorner() {
+		return new Vec2f(tileMap.getTileSize()*tWidth, tileMap.getTileSize()*tHeight);
 	}
 	
 	// World Query Methods

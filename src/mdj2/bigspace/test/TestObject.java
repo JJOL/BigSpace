@@ -13,7 +13,7 @@ public class TestObject extends GameObject{
 
 	
 	public TestObject(GameWorld world) {
-		super(world);
+		super();
 		mass = 1f;
 		pos = new Vec2f(0,0);
 		vel = new Vec2f(10, 0);

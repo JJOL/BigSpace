@@ -17,6 +17,7 @@ public abstract class GameObject {
 	
 	protected GameWorld world;
 	protected boolean   shouldBeRemoved;
+	protected boolean hasSpawned;
 	
 	// Physics
 	
@@ -35,17 +36,24 @@ public abstract class GameObject {
 	
 	// For External Reactions
 	
-	public GameObject(GameWorld world) {
+	public GameObject() {
 		gId = nextId();
 		
 		// Creates Default vars
-		this.world = world;
+		world = null;
+		hasSpawned = false;
 		
 		this.mass = 1f;
 		this.pos = new Vec2f();
 		this.vel = new Vec2f();
 		this.acc = new Vec2f();
-		this.collider = new Collider();
+		this.collider = new Collider(this);
+	}
+	
+	public void onSpawn(GameWorld world, Vec2f spawnPos) {
+		this.world = world;
+		this.pos   = new Vec2f(spawnPos);
+		hasSpawned = true;
 	}
 	
 	public int getId() {
@@ -105,6 +113,8 @@ public abstract class GameObject {
 		
 	}
 	
+	public void onCollision(GameObject other) {}
+	
 	public void render(Graphics2D g) {};
 	
 	public void update() {}
@@ -121,5 +131,14 @@ public abstract class GameObject {
 		
 		return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		String objKey = "obj4ct_" + getId() + "_Key";
+		return objKey.hashCode();
+	}
+	
+	
+	public void notifyMove() {}
 	
 }

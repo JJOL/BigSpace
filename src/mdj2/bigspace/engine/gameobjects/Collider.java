@@ -12,8 +12,8 @@ public class Collider extends ObjectComponent{
 	private float top, right, bottom, left;
 	private float width, height;
 	
-	public Collider() {
-		
+	public Collider(GameObject obj) {
+		super(obj);
 	}
 	
 	public Vec2f getCenter() {
@@ -57,6 +57,26 @@ public class Collider extends ObjectComponent{
 		}
 		
 		return coord;
+	}
+	
+	public boolean collides (Collider c) {
+		return false;
+	}
+	
+	public Vec2f getTop() {
+		return new Vec2f();
+	}
+	
+	public Vec2f getBottom() {
+		return new Vec2f();
+	}
+
+	public Vec2f getLeft() {
+		return new Vec2f();
+	}
+	
+	public Vec2f getRight() {
+		return new Vec2f();
 	}
 	
 }
